@@ -7,7 +7,7 @@ FORMAT = 'utf-8'
 DISCONNECT_MSG = "DC"
 
 argParser = argparse.ArgumentParser(description='Start the chat server and listen for incoming connections.')
-argParser.add_argument('port', type=int, help='The port the server is running on (Integers only).')
+argParser.add_argument('port', type=int, help='The port the server is running on.')
 args = argParser.parse_args()
 port = args.port
 
@@ -28,7 +28,7 @@ def handle_client(conn, addr):
     print(f"[NEW CONNECTION] {addr} connected.")
 
     while True:
-        msg = conn.recv(2048).decode(FORMAT)
+        msg = conn.recv(1024).decode(FORMAT)
         broadcast(msg.encode(FORMAT), conn)
         if msg == DISCONNECT_MSG:
             broadcast(f'\nUser is now disconnected from chat room\n'.encode(FORMAT), conn)
