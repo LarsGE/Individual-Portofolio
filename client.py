@@ -5,14 +5,27 @@ import time
 import threading
 
 
-PORT = 5050
 FORMAT = 'utf-8'
 DISCONNECT_MESSAGE = "DC"
-SERVER = socket.gethostbyname(socket.gethostname())
-ADDR = (SERVER, PORT)
+
+argParser = argparse.ArgumentParser(description='Connect to the chat room. Example: client.py localhost 4242 Steven')
+argParser.add_argument('IP', type=str, help='IP address of the server the client is connecting to.')
+argParser.add_argument('port', type=int, help='The port the client is connecting to (Integers only).')
+argParser.add_argument('name', type=str, help='The name of the client. Connect as a host or a bot(Ash, Misty or Brock)')
+args = argParser.parse_args()
+IP = args.IP
+port = args.port
+name = args.name
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client.connect(ADDR)
+client.connect((IP, port))
+
+
+bots = ["ola", "seb", "fred", "haakon"]
+
+
+good_things = ["laugh", "play", "relax", "read", "train", "sleep"]
+bad_things = ["scream", "fight", "moan", "bicker", "complain", "kill"]
 
 
 def receivemessage():

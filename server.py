@@ -1,20 +1,21 @@
+
 import socket
 import threading
-# import argparse
+import argparse
 
-PORT = 5050
-SERVER = socket.gethostbyname(socket.gethostname())
-ADDR = (SERVER, PORT)
 FORMAT = 'utf-8'
 DISCONNECT_MSG = "DC"
 
-'''argParser = argparse.ArgumentParser(description='Start the chat server and listen for incoming connections.')
-args = argParser.parse_args()'''
-
+argParser = argparse.ArgumentParser(description='Start the chat server and listen for incoming connections.')
+argParser.add_argument('port', type=int, help='The port the server is running on (Integers only).')
+args = argParser.parse_args()
+port = args.port
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind(ADDR)
+server.bind(('localhost', port))
+server.listen()
 clients = []
+clientNames = []
 
 
 def broadcast(message, conn):
@@ -33,38 +34,14 @@ def handle_client(conn, addr):
             broadcast(f'\nUser is now disconnected from chat room\n'.encode(FORMAT), conn)
             clients.remove(conn)
             break
-        if msg == "connect ola":
-            ola(msg, conn)
-        if msg == "connect seb":
-            seb(msg, conn)
-        if msg == "connect fred":
-            fred(msg, conn)
-        if msg == "connect haakon":
-            haakon(msg, conn)
 
         print(f"[{addr}] {msg}")
     conn.close()
 
 
-def ola(msg, conn):
-    broadcast("Vinland saga", conn)
-
-
-def seb(msg, conn):
-    broadcast()
-
-
-def fred(msg, conn):
-    broadcast()
-
-
-def haakon(msg, conn):
-    broadcast()
-
-
 def start():
     server.listen()
-    print(f"[LISTENING] Server is listening on {SERVER}")
+    print(f"[LISTENING] Server is listening...")
     while True:
         conn, addr = server.accept()
         thread = threading.Thread(target=handle_client, args=(conn, addr))
